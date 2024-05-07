@@ -6,6 +6,7 @@ import express from 'express';
 
 import genreRouter from './routes/genres';
 import homeRouter from './routes/home';
+import customerRouter from './routes/customers'
 const app = express();
 
 app.set('view engine', 'pug');
@@ -26,6 +27,7 @@ if (app.get('env') === 'development') {
 ////////// Routers
 
 app.use('/api/genres', genreRouter);
+app.use('/api/customers', customerRouter);
 app.use('/', homeRouter);
 
 ////////// Listening on the server

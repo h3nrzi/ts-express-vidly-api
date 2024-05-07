@@ -1,15 +1,15 @@
 const dbLog = require('debug')('app:dbLog');
 import mongoose from 'mongoose';
-import joi from 'joi';
+import Joi from 'joi';
 import express from 'express';
 const router = express.Router();
 
 function validateGenre(genre: { name: string }) {
     const schema = {
-        name: joi.string().min(3).required(),
+        name: Joi.string().min(3).required(),
     };
 
-    return joi.validate(genre, schema);
+    return Joi.validate(genre, schema);
 }
 
 // connecting to DB
@@ -43,10 +43,10 @@ const Genre = mongoose.model('Course', genreSchema);
 /////////// GET ALL
 
 router.get('/', async (req, res) => {
-    const genre = await Genre
+    const genres = await Genre
         .find()
         .sort({ name: 1 })
-    res.json(genre);
+    res.json(genres);
 });
 
 // /////////// GET ONE
