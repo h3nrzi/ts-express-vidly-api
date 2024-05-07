@@ -1,48 +1,6 @@
-import mongoose from 'mongoose';
-import Joi from 'joi';
+import { Customer, validateCustomer } from '../models/customer';
 import express from 'express';
 const router = express.Router();
-
-interface Customer {
-    name: string,
-    isGold: boolean,
-    phone: string
-}
-
-function validateCustomer(customer: Customer) {
-    const schema = {
-        name: Joi.string().min(5).max(50).required(),
-        phone: Joi.string().min(5).max(50).required(),
-        isGold: Joi.boolean()
-    };
-
-    return Joi.validate(customer, schema);
-}
-
-// creating schema 
-const customerSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true,
-        minlength: 5, maxlength: 50,
-    },
-    isGold: {
-        type: Boolean,
-        default: false
-    },
-    phone: {
-        type: String,
-        required: true,
-        minlength: 5, maxlength: 50,
-    },
-});
-
-// creating Course class
-const Customer = mongoose.model('Customer', customerSchema);
-
-
-
-
 
 
 
