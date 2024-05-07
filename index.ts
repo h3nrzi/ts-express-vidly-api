@@ -1,4 +1,5 @@
-const debug = require('debug')('app:startup');
+export const serverLog = require('debug')('app:serverLog');
+export const log = require('debug')('app:log');
 import morgan from 'morgan';
 import helmet from 'helmet';
 import express from 'express';
@@ -18,7 +19,7 @@ app.use(express.static('public'));
 app.use(helmet());
 if (app.get('env') === 'development') {
     app.use(morgan('tiny'));
-    debug('Morgan enabled...');
+    log('Morgan enabled...');
 };
 
 
@@ -30,7 +31,7 @@ app.use('/', homeRouter);
 ////////// Listening on the server
 
 const port = process.env.PORT || 3000;
-app.listen(port, () => console.log('Listening on port ' + port));
+app.listen(port, () => serverLog('Listening on port ' + port));
 
 
 

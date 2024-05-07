@@ -1,13 +1,10 @@
+const dbLog = require('debug')('app:dbLog');
+import mongoose from 'mongoose';
 import joi from 'joi';
 import express from 'express';
 const router = express.Router();
 
-interface Genre {
-    id: number;
-    name: string;
-}
-
-function validateGenre(genre: Genre) {
+function validateGenre(genre: { name: string }) {
     const schema = {
         name: joi.string().min(3).required(),
     };
@@ -15,24 +12,48 @@ function validateGenre(genre: Genre) {
     return joi.validate(genre, schema);
 }
 
-const genres: Genre[] = [
-    { id: 1, name: "Action" },
-    { id: 2, name: "Horror" },
-    { id: 3, name: "Romance" },
-];
+// connecting to DB
+mongoose
+    .connect('mongodb://localhost/vidly', {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    })
+    .then(() => dbLog('Connected to MongoDB...'))
+    .catch(() => dbLog('Could not connect to MongoDB...'));
+
+
+// creating schema 
+const genreSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+        minlength: 5, maxlength: 255,
+    }
+});
+
+// creating Course class
+const Genre = mongoose.model('Course', genreSchema);
+
+
+
+
+
+
 
 /////////// GET ALL
 
-router.get('/', (req, res) => {
-    res.send(genres);
+router.get('/', async (req, res) => {
+    const genre = await Genre
+        .find()
+        .sort({ name: 1 })
+    res.json(genre);
 });
 
-/////////// GET ONE
+// /////////// GET ONE
 
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
     // Look up the genre and send the to client
-    const genre = genres.find((genre) =>
-        genre.id === parseInt(req.params.id));
+    const genre = await Genre.findById(req.params.id)
 
     if (!genre)
         return res
@@ -44,7 +65,7 @@ router.get('/:id', (req, res) => {
 
 ////////// POST
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
     // Validate the request
     const { error } = validateGenre(req.body);
 
@@ -54,29 +75,18 @@ router.post('/', (req, res) => {
             .send(error.details[0].message);
 
     // Create genre and send to the client
-    const genre: Genre = {
-        id: genres.length + 1,
-        name: req.body.name
-    };
+    let genre = new Genre({ name: req.body.name })
+    genre = await genre.save()
 
-    genres.push(genre);
 
     return res
         .status(201)
         .send(genre);
 });
 
-////////// PUT
+// ////////// PUT
 
-router.put('/:id', (req, res) => {
-    // Look up the genre
-    const genre = genres.find((genre) =>
-        genre.id === parseInt(req.params.id));
-    if (!genre)
-        return res
-            .status(404)
-            .send('ژانر با شناسه ی داده شده پیدا نشد!');
-
+router.put('/:id', async (req, res) => {
     // Validate the request
     const { error } = validateGenre(req.body);
 
@@ -85,26 +95,31 @@ router.put('/:id', (req, res) => {
             .status(400)
             .send(error.details[0].message);
 
-    // Update the genre and send to the client
-    genre.name = req.body.name;
+    // Look up the genre and update and send to the client
+    const genre = await Genre.findByIdAndUpdate(
+        req.params.id,
+        { name: req.body.name },
+        { new: true }
+    )
 
-    return res.send(genre);
-});
-
-/////////// DELETE
-
-router.delete('/:id', (req, res) => {
-    // Look up the genre
-    const genre = genres.find((genre) =>
-        genre.id === parseInt(req.params.id));
     if (!genre)
         return res
             .status(404)
             .send('ژانر با شناسه ی داده شده پیدا نشد!');
 
+    return res.send(genre);
+});
+
+// /////////// DELETE
+
+router.delete('/:id', async (req, res) => {
     // Delete the genre and send to the client
-    const index = genres.indexOf(genre);
-    genres.splice(index, 1);
+    const genre = await Genre.findByIdAndRemove(req.params.id)
+
+    if (!genre)
+        return res
+            .status(404)
+            .send('ژانر با شناسه ی داده شده پیدا نشد!');
 
     return res.send(genre);
 });
