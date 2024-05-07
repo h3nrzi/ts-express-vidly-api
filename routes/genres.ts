@@ -1,44 +1,6 @@
-const dbLog = require('debug')('app:dbLog');
-import mongoose from 'mongoose';
-import Joi from 'joi';
+import { Genre, validateGenre } from '../models/genre';
 import express from 'express';
 const router = express.Router();
-
-function validateGenre(genre: { name: string }) {
-    const schema = {
-        name: Joi.string().min(3).required(),
-    };
-
-    return Joi.validate(genre, schema);
-}
-
-// connecting to DB
-mongoose
-    .connect('mongodb://localhost/vidly', {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-    })
-    .then(() => dbLog('Connected to MongoDB...'))
-    .catch(() => dbLog('Could not connect to MongoDB...'));
-
-
-// creating schema 
-const genreSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true,
-        minlength: 5, maxlength: 255,
-    }
-});
-
-// creating Course class
-const Genre = mongoose.model('Course', genreSchema);
-
-
-
-
-
-
 
 /////////// GET ALL
 
@@ -49,7 +11,7 @@ router.get('/', async (req, res) => {
     res.json(genres);
 });
 
-// /////////// GET ONE
+///////////// GET ONE
 
 router.get('/:id', async (req, res) => {
     // Look up the genre and send the to client
@@ -84,7 +46,7 @@ router.post('/', async (req, res) => {
         .send(genre);
 });
 
-// ////////// PUT
+//////////// PUT
 
 router.put('/:id', async (req, res) => {
     // Validate the request
@@ -110,7 +72,7 @@ router.put('/:id', async (req, res) => {
     return res.send(genre);
 });
 
-// /////////// DELETE
+///////////// DELETE
 
 router.delete('/:id', async (req, res) => {
     // Delete the genre and send to the client

@@ -2,8 +2,6 @@ import { Customer, validateCustomer } from '../models/customer';
 import express from 'express';
 const router = express.Router();
 
-
-
 /////////// GET ALL
 
 router.get('/', async (req, res) => {

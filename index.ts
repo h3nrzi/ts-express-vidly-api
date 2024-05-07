@@ -1,5 +1,4 @@
-export const serverLog = require('debug')('app:serverLog');
-export const log = require('debug')('app:log');
+import mongoose from 'mongoose';
 import morgan from 'morgan';
 import helmet from 'helmet';
 import express from 'express';
@@ -7,7 +6,19 @@ import express from 'express';
 import genreRouter from './routes/genres';
 import homeRouter from './routes/home';
 import customerRouter from './routes/customers'
+const dbLog = require('debug')('app:dbLog');
+const serverLog = require('debug')('app:serverLog');
+const log = require('debug')('app:log');
 const app = express();
+
+//////////// connecting to DB
+mongoose
+    .connect('mongodb://localhost/vidly', {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    })
+    .then(() => dbLog('Connected to MongoDB...'))
+    .catch(() => dbLog('Could not connect to MongoDB...'));
 
 app.set('view engine', 'pug');
 app.set('views', './views'); // default
