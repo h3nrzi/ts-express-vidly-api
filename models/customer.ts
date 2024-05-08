@@ -1,11 +1,6 @@
+import { Customer } from '../dtos';
 import Joi from 'joi';
 import mongoose from 'mongoose';
-
-interface Customer {
-    name: string,
-    isGold: boolean,
-    phone: string
-}
 
 function validateCustomer(customer: Customer) {
     const schema = {

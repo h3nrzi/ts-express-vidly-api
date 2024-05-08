@@ -1,7 +1,8 @@
+import { Genre } from '../dtos';
 import Joi from 'joi';
 import mongoose from 'mongoose';
 
-function validateGenre(genre: { name: string }) {
+function validateGenre(genre: Genre) {
     const schema = {
         name: Joi.string().min(3).required(),
     };
@@ -17,6 +18,6 @@ const genreSchema = new mongoose.Schema({
     }
 });
 
-const Genre = mongoose.model('Course', genreSchema);
+const Genre = mongoose.model('Genre', genreSchema);
 
 export { Genre, validateGenre }
