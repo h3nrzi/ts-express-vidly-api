@@ -1,11 +1,16 @@
 import { RentalDto } from '../dtos'
-import Joi from 'joi'
 import { Schema, model } from 'mongoose'
+import Joi from 'joi'
+const objectId = require('joi-objectid')
+// @ts-expect-error
+Joi.objectId = objectId(Joi)
 
 function validateRental(rental: RentalDto) {
     const schema = {
-        customerId: Joi.string().required(),
-        movieId: Joi.string().required()
+        // @ts-expect-error
+        customerId: Joi.objectId().required(),
+        // @ts-expect-error
+        movieId: Joi.objectId().required()
     }
 
     return Joi.validate(rental, schema)
