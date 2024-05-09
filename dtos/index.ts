@@ -1,3 +1,8 @@
+interface AuthDto {
+    email: string,
+    password: string
+}
+
 interface UserDto {
     name: string,
     email: string,
@@ -26,4 +31,11 @@ interface MovieDto {
     dailyRentalRate: number
 }
 
-export { GenreDto, MovieDto, CustomerDto, RentalDto, UserDto }
+export {
+    GenreDto,
+    MovieDto,
+    CustomerDto,
+    RentalDto,
+    UserDto,
+    AuthDto
+}
