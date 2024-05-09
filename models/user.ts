@@ -4,8 +4,8 @@ import { Schema, model } from 'mongoose';
 
 function validateUser(user: UserDto) {
     const schema = {
-        name: Joi.string().required().min(50).max(50),
-        email: Joi.string().required().min(50).max(255).email(),
+        name: Joi.string().required().min(5).max(50),
+        email: Joi.string().required().min(5).max(255).email(),
         password: Joi.string().required().min(5).max(1024),
     }
 

@@ -8,6 +8,7 @@ import morgan from 'morgan';
 import helmet from 'helmet';
 import express from 'express';
 
+import userRouter from './routes/users'
 import rentalRouter from './routes/rentals'
 import movieRouter from './routes/movies'
 import genreRouter from './routes/genres';
@@ -44,6 +45,7 @@ if (app.get('env') === 'development') {
 
 ////////// Routers
 
+app.use('/api/users', userRouter);
 app.use('/api/rentals', rentalRouter);
 app.use('/api/genres', genreRouter);
 app.use('/api/customers', customerRouter);
