@@ -1,3 +1,8 @@
+interface RentalDto {
+    customerId: string,
+    movieId: string
+}
+
 interface CustomerDto {
     name: string,
     isGold: boolean,
@@ -15,4 +20,4 @@ interface MovieDto {
     dailyRentalRate: number
 }
 
-export { GenreDto, MovieDto, CustomerDto }
+export { GenreDto, MovieDto, CustomerDto, RentalDto }

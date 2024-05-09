@@ -1,8 +1,8 @@
-import { GenreDto } from '../dtos';
+import { GenreDto as Genre } from '../dtos';
 import Joi from 'joi';
 import { Schema, model } from 'mongoose';
 
-function validateGenre(genre: GenreDto) {
+function validateGenre(genre: Genre) {
     const schema = {
         name: Joi.string().min(3).required(),
     };
@@ -18,6 +18,6 @@ const genreSchema = new Schema({
     }
 });
 
-const GenreDto = model('Genre', genreSchema);
+const Genre = model('Genre', genreSchema);
 
-export { GenreDto, validateGenre, genreSchema }
+export { Genre, validateGenre, genreSchema }
