@@ -1,8 +1,8 @@
-import { GenreDto as Genre } from '../dtos';
+import { GenreDto } from '../dtos';
 import Joi from 'joi';
 import { Schema, model } from 'mongoose';
 
-function validateGenre(genre: Genre) {
+function validateGenre(genre: GenreDto) {
     const schema = {
         name: Joi.string().min(3).required(),
     };
@@ -14,7 +14,7 @@ const genreSchema = new Schema({
     name: {
         type: String,
         required: true,
-        minlength: 5, maxlength: 255,
+        minlength: 5, maxlength: 50,
     }
 });
 
