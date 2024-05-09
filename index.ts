@@ -1,3 +1,8 @@
+import Joi from 'joi'
+const objectId = require('joi-objectid')
+const dbLog = require('debug')('app:dbLog');
+const serverLog = require('debug')('app:serverLog');
+const log = require('debug')('app:log');
 import mongoose from 'mongoose';
 import morgan from 'morgan';
 import helmet from 'helmet';
@@ -8,10 +13,10 @@ import movieRouter from './routes/movies'
 import genreRouter from './routes/genres';
 import homeRouter from './routes/home';
 import customerRouter from './routes/customers'
-const dbLog = require('debug')('app:dbLog');
-const serverLog = require('debug')('app:serverLog');
-const log = require('debug')('app:log');
+
 const app = express();
+// @ts-expect-error
+Joi.objectId = objectId(Joi)
 
 //////////// connecting to DB
 mongoose
