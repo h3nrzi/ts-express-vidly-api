@@ -1,6 +1,6 @@
 import { CustomerDto } from '../dtos';
 import Joi from 'joi';
-import mongoose from 'mongoose';
+import { Schema, model } from 'mongoose';
 
 function validateCustomer(customer: CustomerDto) {
     const schema = {
@@ -12,7 +12,7 @@ function validateCustomer(customer: CustomerDto) {
     return Joi.validate(customer, schema);
 }
 
-const customerSchema = new mongoose.Schema({
+const customerSchema = new Schema({
     name: {
         type: String,
         required: true,
@@ -29,6 +29,6 @@ const customerSchema = new mongoose.Schema({
     },
 });
 
-const CustomerDto = mongoose.model('Customer', customerSchema);
+const CustomerDto = model('Customer', customerSchema);
 
-export { CustomerDto as Customer, validateCustomer }
+export { CustomerDto, validateCustomer }

@@ -1,6 +1,6 @@
 import { GenreDto } from '../dtos';
 import Joi from 'joi';
-import mongoose from 'mongoose';
+import { Schema, model } from 'mongoose';
 
 function validateGenre(genre: GenreDto) {
     const schema = {
@@ -10,7 +10,7 @@ function validateGenre(genre: GenreDto) {
     return Joi.validate(genre, schema);
 }
 
-const genreSchema = new mongoose.Schema({
+const genreSchema = new Schema({
     name: {
         type: String,
         required: true,
@@ -18,6 +18,6 @@ const genreSchema = new mongoose.Schema({
     }
 });
 
-const GenreDto = mongoose.model('Genre', genreSchema);
+const GenreDto = model('Genre', genreSchema);
 
-export { GenreDto as Genre, validateGenre, genreSchema }
+export { GenreDto, validateGenre, genreSchema }
