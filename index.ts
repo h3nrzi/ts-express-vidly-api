@@ -3,6 +3,7 @@ import morgan from 'morgan';
 import helmet from 'helmet';
 import express from 'express';
 
+import movieRouter from './routes/movies'
 import genreRouter from './routes/genres';
 import homeRouter from './routes/home';
 import customerRouter from './routes/customers'
@@ -39,6 +40,7 @@ if (app.get('env') === 'development') {
 
 app.use('/api/genres', genreRouter);
 app.use('/api/customers', customerRouter);
+app.use('/api/movies', movieRouter);
 app.use('/', homeRouter);
 
 ////////// Listening on the server

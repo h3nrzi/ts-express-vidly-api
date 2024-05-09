@@ -1,18 +1,18 @@
-interface Customer {
+interface CustomerDto {
     name: string,
     isGold: boolean,
     phone: string
 }
 
-interface Genre {
+interface GenreDto {
     name: string
 }
 
-interface Movie {
+interface MovieDto {
     title: string,
     genreId: number,
     numberInStock: number,
     dailyRentalRate: number
 }
 
-export { Genre, Movie, Customer }
+export { GenreDto, MovieDto, CustomerDto }
