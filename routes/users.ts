@@ -1,8 +1,9 @@
+import express from 'express';
 import bcrypt from 'bcrypt'
 import * as _ from 'lodash'
+
 import { UserDto } from '../dtos';
 import { User, validateUser } from '../models/user';
-import express from 'express';
 const router = express.Router();
 
 
@@ -22,7 +23,11 @@ router.post('/', async (req, res) => {
     user.password = await bcrypt.hash(user.password, salt)
     await user.save()
 
-    return res.status(201).json(_.pick(user, ['_id', 'name', 'email']));
+    const token = user.generateAuthToken()
+    return res
+        .status(201)
+        .header('x-auth-token', token)
+        .json(_.pick(user, ['_id', 'name', 'email']));
 });
 
 export default router;

@@ -32,7 +32,8 @@ router.post('/', async (req, res) => {
     if (!validPassword)
         return res.status(400).send('ایمیل یا رمز عبور نامعتبر است.')
 
-    return res.send(true);
+    const token = user.generateAuthToken()
+    return res.send(token);
 });
 
 export default router;

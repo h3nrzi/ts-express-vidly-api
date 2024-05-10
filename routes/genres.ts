@@ -1,5 +1,7 @@
-import { Genre, validateGenre } from '../models/genre';
 import express from 'express';
+import auth from '../Middlewares/auth';
+
+import { Genre, validateGenre } from '../models/genre';
 const router = express.Router();
 
 /////////// GET ALL
@@ -27,7 +29,7 @@ router.get('/:id', async (req, res) => {
 
 ////////// POST
 
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
     // Validate the request
     const { error } = validateGenre(req.body);
 

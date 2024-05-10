@@ -1,5 +1,8 @@
-import { UserDto } from '../dtos';
 import Joi from 'joi';
+import jwt from 'jsonwebtoken'
+import config from 'config'
+
+import { UserDto } from '../dtos';
 import { Schema, model } from 'mongoose';
 
 function validateUser(user: UserDto) {
@@ -27,6 +30,11 @@ const userSchema = new Schema({
         minlength: 5, maxlength: 1024,
     }
 });
+
+userSchema.methods.generateAuthToken = function () {
+    console.log(this);
+    return jwt.sign({ _id: this._id }, config.get('jwtPrivateKey'))
+}
 
 const User = model('User', userSchema);
 

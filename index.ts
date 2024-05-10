@@ -1,3 +1,4 @@
+import config from 'config'
 import Joi from 'joi'
 const objectId = require('joi-objectid')
 const dbLog = require('debug')('app:dbLog');
@@ -19,6 +20,10 @@ import customerRouter from './routes/customers'
 const app = express();
 // @ts-expect-error
 Joi.objectId = objectId(Joi)
+if (!config.get('jwtPrivateKey')) {
+    log("FATAL ERROR: jwtPrivateKey is not defined.")
+    process.exit(1)
+}
 
 //////////// connecting to DB
 mongoose
