@@ -10,6 +10,7 @@ function validateUser(user: UserDto) {
         name: Joi.string().required().min(5).max(50),
         email: Joi.string().required().min(5).max(255).email(),
         password: Joi.string().required().min(5).max(1024),
+        isAdmin: Joi.boolean()
     }
 
     return Joi.validate(user, schema)
@@ -28,12 +29,19 @@ const userSchema = new Schema({
     password: {
         type: String, required: true,
         minlength: 5, maxlength: 1024,
+    },
+    isAdmin: {
+        type: Boolean,
+        default: false
     }
 });
 
 userSchema.methods.generateAuthToken = function () {
-    console.log(this);
-    return jwt.sign({ _id: this._id }, config.get('jwtPrivateKey'))
+    return jwt.sign({
+        _id: this._id,
+        // @ts-expect-error
+        isAdmin: this.isAdmin
+    }, config.get('jwtPrivateKey'))
 }
 
 const User = model('User', userSchema);

@@ -1,7 +1,8 @@
 import express from 'express';
-import auth from '../Middlewares/auth';
 
 import { Genre, validateGenre } from '../models/genre';
+import auth from '../Middlewares/auth';
+import admin from '../Middlewares/admin';
 const router = express.Router();
 
 /////////// GET ALL
@@ -76,7 +77,7 @@ router.put('/:id', async (req, res) => {
 
 ///////////// DELETE
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', auth, admin, async (req, res) => {
     // Delete the genre and send to the client
     const genre = await Genre.findByIdAndRemove(req.params.id)
 
