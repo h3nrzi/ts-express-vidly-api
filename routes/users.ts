@@ -4,8 +4,15 @@ import * as _ from 'lodash'
 
 import { UserDto } from '../dtos';
 import { User, validateUser } from '../models/user';
+import auth from '../Middlewares/auth';
 const router = express.Router();
 
+
+router.get('/me', auth, async (req, res) => {
+    // @ts-expect-error
+    const user = await User.findById(req.user._id).select('-password -__v')
+    return res.json(user)
+})
 
 router.post('/', async (req, res) => {
     const { error } = validateUser(req.body);
