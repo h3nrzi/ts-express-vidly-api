@@ -7,7 +7,7 @@ const error = (
     res: Response,
     next: NextFunction
 ) => {
-    logger.error('ERROR', err)
+    logger.log('error', '❌', err)
     return res.status(500).send('Something failed.')
 }
 

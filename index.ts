@@ -4,6 +4,7 @@ require('express-async-errors')
 import config from 'config'
 import Joi from 'joi'
 const objectId = require('joi-objectid')
+const errLog = require('debug')('app:errLog');
 const dbLog = require('debug')('app:dbLog');
 const serverLog = require('debug')('app:serverLog');
 const log = require('debug')('app:log');
@@ -21,13 +22,10 @@ import genreRouter from './routes/genres';
 import homeRouter from './routes/home';
 import customerRouter from './routes/customers'
 
-const app = express();
-// @ts-expect-error
-Joi.objectId = objectId(Joi)
-if (!config.get('jwtPrivateKey')) {
-    log("FATAL ERROR: jwtPrivateKey is not defined.")
-    process.exit(1)
-}
+
+
+
+
 export const logger = winston.createLogger({
     transports: [
         new winston.transports.File({ filename: "logfile.log" }),
@@ -36,7 +34,25 @@ export const logger = winston.createLogger({
     ]
 })
 
-//////////// connecting to DB
+process.on('uncaughtException', (ex) => {
+    errLog("We got an uncaught exception.")
+    logger.log('error', '❌', ex)
+})
+
+const app = express();
+
+// @ts-expect-error
+Joi.objectId = objectId(Joi)
+
+if (!config.get('jwtPrivateKey')) {
+    errLog("FATAL ERROR: jwtPrivateKey is not defined.")
+    process.exit(1)
+}
+
+
+
+
+
 mongoose
     .connect('mongodb://localhost/vidly', {
         useNewUrlParser: true,
@@ -57,6 +73,7 @@ app.use(helmet());
 if (app.get('env') === 'development') {
     app.use(morgan('tiny'));
     log('Morgan enabled...');
+    throw new Error("Something failed during startup.")
 };
 
 
