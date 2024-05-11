@@ -40,5 +40,10 @@
     "pug": "3.0.2",
     "winston": "^3.13.0",
     "winston-mongodb": "^5.1.1"
+  },
+  "nodemonConfig": {
+    "events": {
+      "start": "echo '--------------------\n'& clear || cls"
+    }
   }
 }
