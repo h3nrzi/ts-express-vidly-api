@@ -5,62 +5,42 @@ import auth from '../Middlewares/auth';
 import admin from '../Middlewares/admin';
 const router = express.Router();
 
-/////////// GET ALL
+
 
 router.get('/', async (req, res) => {
-    const genres = await Genre
-        .find()
-        .sort({ name: 1 })
-    res.json(genres);
+    throw new Error("could not get the genres.")
+    // const genres = await Genre.find().sort('name')
+    // res.json(genres);
 });
 
-///////////// GET ONE
 
 router.get('/:id', async (req, res) => {
-    // Look up the genre and send the to client
     const genre = await Genre.findById(req.params.id)
 
     if (!genre)
-        return res
-            .status(404)
-            .send('ژانر با شناسه ی داده شده پیدا نشد!');
+        return res.status(404).send('ژانر با شناسه ی داده شده پیدا نشد!');
 
     return res.send(genre);
 });
 
-////////// POST
-
 router.post('/', auth, async (req, res) => {
-    // Validate the request
     const { error } = validateGenre(req.body);
 
     if (error)
-        return res
-            .status(400)
-            .send(error.details[0].message);
+        return res.status(400).send(error.details[0].message);
 
-    // Create genre and send to the client
     let genre = new Genre({ name: req.body.name })
     genre = await genre.save()
 
-
-    return res
-        .status(201)
-        .send(genre);
+    return res.status(201).send(genre);
 });
 
-//////////// PUT
-
 router.put('/:id', async (req, res) => {
-    // Validate the request
     const { error } = validateGenre(req.body);
 
     if (error)
-        return res
-            .status(400)
-            .send(error.details[0].message);
+        return res.status(400).send(error.details[0].message);
 
-    // Look up the genre and update and send to the client
     const genre = await Genre.findByIdAndUpdate(
         req.params.id,
         { name: req.body.name },
@@ -68,23 +48,16 @@ router.put('/:id', async (req, res) => {
     )
 
     if (!genre)
-        return res
-            .status(404)
-            .send('ژانر با شناسه ی داده شده پیدا نشد!');
+        return res.status(404).send('ژانر با شناسه ی داده شده پیدا نشد!');
 
     return res.send(genre);
 });
 
-///////////// DELETE
-
 router.delete('/:id', auth, admin, async (req, res) => {
-    // Delete the genre and send to the client
     const genre = await Genre.findByIdAndRemove(req.params.id)
 
     if (!genre)
-        return res
-            .status(404)
-            .send('ژانر با شناسه ی داده شده پیدا نشد!');
+        return res.status(404).send('ژانر با شناسه ی داده شده پیدا نشد!');
 
     return res.send(genre);
 });

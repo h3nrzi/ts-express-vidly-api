@@ -15,7 +15,7 @@
     "@types/express": "4.17.21",
     "@types/helmet": "4.0.0",
     "@types/joi": "13.6.3",
-    "@types/jsonwebtoken": "^9.0.6",
+    "@types/jsonwebtoken": "9.0.6",
     "@types/lodash": "4.17.1",
     "@types/mongoose": "5.11.97",
     "@types/morgan": "1.9.9",
@@ -29,13 +29,16 @@
     "config": "3.3.11",
     "debug": "4.3.4",
     "express": "4.19.2",
+    "express-async-errors": "3.1.1",
     "helmet": "7.1.0",
     "joi": "13.0.1",
     "joi-objectid": "4.0.2",
-    "jsonwebtoken": "^9.0.2",
+    "jsonwebtoken": "9.0.2",
     "lodash": "4.17.21",
     "mongoose": "5.13.22",
     "morgan": "1.9.0",
-    "pug": "3.0.2"
+    "pug": "3.0.2",
+    "winston": "^3.13.0",
+    "winston-mongodb": "^5.1.1"
   }
 }

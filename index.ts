@@ -1,3 +1,6 @@
+import winston from 'winston';
+require('winston-mongodb')
+require('express-async-errors')
 import config from 'config'
 import Joi from 'joi'
 const objectId = require('joi-objectid')
@@ -9,6 +12,7 @@ import morgan from 'morgan';
 import helmet from 'helmet';
 import express from 'express';
 
+import error from './Middlewares/error';
 import authRouter from './routes/auth'
 import userRouter from './routes/users'
 import rentalRouter from './routes/rentals'
@@ -24,12 +28,19 @@ if (!config.get('jwtPrivateKey')) {
     log("FATAL ERROR: jwtPrivateKey is not defined.")
     process.exit(1)
 }
+export const logger = winston.createLogger({
+    transports: [
+        new winston.transports.File({ filename: "logfile.log" }),
+        // @ts-expect-error
+        new winston.transports.MongoDB({ db: "mongodb://localhost/vidly", collection: "log" })
+    ]
+})
 
 //////////// connecting to DB
 mongoose
     .connect('mongodb://localhost/vidly', {
         useNewUrlParser: true,
-        useUnifiedTopology: true
+        useUnifiedTopology: true,
     })
     .then(() => dbLog('Connected to MongoDB...'))
     .catch(() => dbLog('Could not connect to MongoDB...'));
@@ -58,6 +69,7 @@ app.use('/api/genres', genreRouter);
 app.use('/api/customers', customerRouter);
 app.use('/api/movies', movieRouter);
 app.use('/', homeRouter);
+app.use(error)
 
 ////////// Listening on the server
 
