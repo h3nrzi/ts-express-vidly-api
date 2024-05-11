@@ -1,28 +1,34 @@
-import winston from 'winston';
+const { createLogger, format, transports } = require('winston');
+const { combine, prettyPrint, colorize, simple, json } = format;
+
 require('winston-mongodb')
 require('express-async-errors')
 
 function logging() {
     // Custom winston logger
-    const logger = winston.createLogger({
+    const logger = createLogger({
         transports: [
-            new winston.transports.File({ filename: "logfile.log" }),
-            // @ts-expect-error
-            new winston.transports.MongoDB({ db: "mongodb://localhost/vidly" })
+            new transports.Console({ format: combine(colorize(), prettyPrint(), simple()) }),
+            new transports.File({ filename: "logfile.log" }),
+            new transports.MongoDB({ db: "mongodb://localhost/vidly" })
         ],
-        exceptionHandlers: [new winston.transports.File({ filename: 'exception.log' })],
-        rejectionHandlers: [new winston.transports.File({ filename: 'rejections.log' })],
+        rejectionHandlers: [
+            new transports.Console({ format: combine(colorize(), prettyPrint(), simple()) }),
+            new transports.File({ filename: 'rejections.log' })
+        ],
+        exceptionHandlers: [
+            new transports.Console({ format: combine(colorize(), prettyPrint(), simple()) }),
+            new transports.File({ filename: 'exception.log' })
+        ],
     })
 
     // process.on('uncaughtException', (ex) => {
-    //     log("We got an Uncaught Exception")
-    //     logger.log('error', '', ex)
+    //     logger.error('', ex)
     //     process.exit(1)
     // })
 
     // process.on('unhandledRejection', (ex) => {
-    //     log("We got an Unhandled Rejection")
-    //     logger.log('error', '', ex)
+    //     logger.error('', ex)
     //     process.exit(1)
     // })
 

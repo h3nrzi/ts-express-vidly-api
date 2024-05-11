@@ -8,7 +8,7 @@ const router = express.Router();
 
 
 router.get('/', async (req, res) => {
-    // throw new Error("نمی توان ژانرها را دریافت کرد")
+    // throw new Error("could not get the genres!")
     const genres = await Genre.find().sort('name')
     res.json(genres);
 });
