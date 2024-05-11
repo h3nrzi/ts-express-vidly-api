@@ -80,7 +80,7 @@ router.put('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
     // Delete the customer and send to the client
-    const customer = await Customer.findByIdAndRemove(req.params.id)
+    const customer = await Customer.findByIdAndDelete(req.params.id)
 
     if (!customer)
         return res

@@ -21,7 +21,7 @@ router.post('/', async (req, res) => {
 
     const { email } = req.body as UserDto
 
-    let user = await User.findOne({ email })
+    let user = await User.findOne({ email }) as any
     if (user)
         return res.status(400).send('کاربر قبلا ثبت نام کرده است')
 

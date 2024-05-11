@@ -54,10 +54,7 @@ if (!config.get('jwtPrivateKey')) {
 
 
 mongoose
-    .connect('mongodb://localhost/vidly', {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    })
+    .connect('mongodb://localhost/vidly')
     .then(() => dbLog('Connected to MongoDB...'))
     .catch(() => dbLog('Could not connect to MongoDB...'));
 

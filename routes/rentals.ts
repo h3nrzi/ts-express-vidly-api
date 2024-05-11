@@ -35,7 +35,7 @@ router.post('/', async (req, res) => {
     if (!customer)
         return res.status(400).send('شناسه ی مشتری نامعتبر است')
 
-    const movie = await Movie.findById(movieId)
+    const movie = await Movie.findById(movieId) as any
     if (!movie)
         return res.status(400).send('شناسه ی فیلم نامعتبر است')
     if (movie.numberInStock === 0)

@@ -29,7 +29,7 @@ router.post('/', async (req, res) => {
 
     const { title, genreId, dailyRentalRate, numberInStock } = req.body as MovieDto;
 
-    const genre = await Movie.findById(genreId);
+    const genre = await Movie.findById(genreId) as any
     if (!genre)
         return res.status(400).send('Invalid genre');
 
@@ -68,7 +68,7 @@ router.put('/:id', async (req, res) => {
 });
 
 router.delete('/:id', async (req, res) => {
-    const movie = await Movie.findByIdAndRemove(req.params.id)
+    const movie = await Movie.findByIdAndDelete(req.params.id)
 
     if (!movie)
         return res.status(404).send('فیلم با شناسه ی داده شده پیدا نشد!');
