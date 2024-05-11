@@ -1,5 +1,3 @@
-const Joi = require('joi')
-Joi.objectId = require('joi-objectid')(Joi)
 export const log = require('debug')('app:log');
 const app = require('express')()
 
@@ -7,6 +5,7 @@ require('./start/logging')()
 require('./start/routes')(app)
 require('./start/db')()
 require('./start/config')()
+require('./start/validation')()
 
 app.set('view engine', 'pug');
 app.set('views', './views'); // default
