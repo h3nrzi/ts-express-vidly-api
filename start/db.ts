@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { logger } from "../index";
+const logger = require('../start/logging')()
 
 function dbConnection() {
     mongoose

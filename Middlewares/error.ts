@@ -1,4 +1,4 @@
-import { logger } from '../index'
+const logger = require('../start/logging')()
 import { Request, Response, NextFunction } from 'express';
 
 const error = (err: Error, req: Request, res: Response, next: NextFunction) => {
