@@ -3,14 +3,11 @@ require('winston-mongodb')
 require('express-async-errors')
 import config from 'config'
 import Joi from 'joi'
-const objectId = require('joi-objectid')
-const log = require('debug')('app:log');
-import mongoose from 'mongoose';
+// @ts-expect-error
+Joi.objectId = require('joi-objectid')(Joi)
+export const log = require('debug')('app:log');
 import express from 'express';
 
-const app = express();
-import appRouter from './start/routes';
-appRouter(app)
 
 // Custom winston logger
 export const logger = winston.createLogger({
@@ -35,8 +32,7 @@ export const logger = winston.createLogger({
 //     process.exit(1)
 // })
 
-// @ts-expect-error
-Joi.objectId = objectId(Joi)
+
 
 if (!config.get('jwtPrivateKey')) {
     log("FATAL ERROR: jwtPrivateKey is not defined.")
@@ -45,16 +41,13 @@ if (!config.get('jwtPrivateKey')) {
 
 
 
+const app = express();
+require('./start/routes')(app)
+require('./start/db')()
 
-
-mongoose
-    .connect('mongodb://localhost/vidly')
-    .then(() => log('Connected to MongoDB...'))
-    .catch(() => log('Could not connect to MongoDB...'));
 
 app.set('view engine', 'pug');
 app.set('views', './views'); // default
-
 ////////// Listening on the server
 
 const port = process.env.PORT || 3000;

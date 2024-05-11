@@ -1,7 +1,6 @@
 import express, { Express } from 'express';
 import morgan from 'morgan';
 import helmet from 'helmet';
-const log = require('debug')('app:log');
 
 import error from '../Middlewares/error';
 import authRouter from '../routes/auth'
@@ -11,6 +10,7 @@ import movieRouter from '../routes/movies'
 import genreRouter from '../routes/genres';
 import homeRouter from '../routes/home';
 import customerRouter from '../routes/customers'
+import { log } from '../index'
 
 function appRouter(app: Express) {
     app.use(express.json());
@@ -35,4 +35,4 @@ function appRouter(app: Express) {
     app.use(error)
 };
 
-export default appRouter
+module.exports = appRouter
