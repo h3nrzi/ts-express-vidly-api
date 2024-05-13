@@ -1,6 +1,8 @@
 import request from 'supertest'
 import { Server, IncomingMessage, ServerResponse } from "http";
+
 import { Genre } from '../../models/genre';
+import { User } from '../../models/user';
 
 interface Genre {
     _id: string;
@@ -54,6 +56,30 @@ describe('/api/genres', () => {
         it('should return 401 if client is not logged in', async () => {
             const res = await request(server).post('/api/genres').send({ name: 'genre1' })
             expect(res.status).toBe(401)
+        })
+
+        it('should return 400 if genre is invalid (less than 5 characters)', async () => {
+            const user = new User() as any
+            const token = user.generateAuthToken()
+
+            const res = await request(server)
+                .post('/api/genres')
+                .send({ name: '1234' })
+                .set('x-auth-token', token)
+
+            expect(res.status).toBe(400)
+        })
+
+        it('should return 400 if genre is invalid (more than 50 characters)', async () => {
+            const user = new User() as any
+            const token = user.generateAuthToken()
+
+            const res = await request(server)
+                .post('/api/genres')
+                .send({ name: 'A'.repeat(51) })
+                .set('x-auth-token', token)
+
+            expect(res.status).toBe(400)
         })
     })
 });
