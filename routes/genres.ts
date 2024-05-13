@@ -3,7 +3,7 @@ import express from 'express';
 import { Genre, validateGenre } from '../models/genre';
 import auth from '../Middlewares/auth';
 import admin from '../Middlewares/admin';
-import mongoose from 'mongoose';
+import validateObjectId from '../Middlewares/validateObjectId';
 const router = express.Router();
 
 
@@ -15,10 +15,7 @@ router.get('/', async (req, res) => {
 });
 
 
-router.get('/:id', async (req, res) => {
-    if (!mongoose.Types.ObjectId.isValid(req.params.id))
-        return res.status(404).send('شناسه نامعتبر است.')
-
+router.get('/:id', validateObjectId, async (req, res) => {
     const genre = await Genre.findById(req.params.id)
     if (!genre)
         return res.status(404).send('ژانر با شناسه ی داده شده پیدا نشد!');
