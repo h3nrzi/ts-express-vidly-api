@@ -1,5 +1,6 @@
 import request from 'supertest'
 import { Server, IncomingMessage, ServerResponse } from "http";
+import { Response } from 'superagent';
 
 import { Genre } from '../../models/genre';
 import { User } from '../../models/user';
@@ -53,43 +54,50 @@ describe('/api/genres', () => {
     });
 
     describe('POST /', () => {
+        let token: string;
+        let name: string;
+
+        // Default value
+        beforeEach(() => {
+            const user = new User() as any
+            token = user.generateAuthToken()
+            name = 'genre1'
+        })
+
+        async function exec(): Promise<Response> {
+            return await request(server)
+                .post('/api/genres')
+                .send({ name })
+                .set('x-auth-token', token)
+        }
+
+
         it('should return 401 if client is not logged in', async () => {
-            const res = await request(server).post('/api/genres').send({ name: 'genre1' })
+            token = '';
+
+            const res = await exec()
+
             expect(res.status).toBe(401)
         })
 
         it('should return 400 if genre is invalid (less than 5 characters)', async () => {
-            const user = new User() as any
-            const token = user.generateAuthToken()
+            name = '1234'
 
-            const res = await request(server)
-                .post('/api/genres')
-                .send({ name: '1234' })
-                .set('x-auth-token', token)
+            const res = await exec()
 
             expect(res.status).toBe(400)
         })
 
         it('should return 400 if genre is invalid (more than 50 characters)', async () => {
-            const user = new User() as any
-            const token = user.generateAuthToken()
+            name = 'A'.repeat(51)
 
-            const res = await request(server)
-                .post('/api/genres')
-                .send({ name: 'A'.repeat(51) })
-                .set('x-auth-token', token)
+            const res = await exec()
 
             expect(res.status).toBe(400)
         })
 
         it('should save the genre if it is valid.', async () => {
-            const user = new User() as any
-            const token = user.generateAuthToken()
-
-            await request(server)
-                .post('/api/genres')
-                .send({ name: 'genre1' })
-                .set('x-auth-token', token)
+            await exec()
 
             const genre = await Genre.findOne({ name: 'genre1' })
 
@@ -97,13 +105,7 @@ describe('/api/genres', () => {
         })
 
         it('should return genre if it is valid.', async () => {
-            const user = new User() as any
-            const token = user.generateAuthToken()
-
-            const res = await request(server)
-                .post('/api/genres')
-                .send({ name: 'genre1' })
-                .set('x-auth-token', token)
+            const res = await exec()
 
             expect(res.status).toBe(201);
             expect(res.body).toHaveProperty('_id')
