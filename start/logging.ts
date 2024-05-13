@@ -1,7 +1,7 @@
 const { createLogger, format, transports } = require('winston');
 const { combine, prettyPrint, colorize, simple, json } = format;
 
-require('winston-mongodb')
+// require('winston-mongodb')
 require('express-async-errors')
 
 function logging() {
@@ -10,7 +10,7 @@ function logging() {
         transports: [
             new transports.Console({ format: combine(colorize(), prettyPrint(), simple()) }),
             new transports.File({ filename: "logfile.log" }),
-            new transports.MongoDB({ db: "mongodb://localhost/vidly" })
+            // new transports.MongoDB({ db: "mongodb://localhost/vidly" })
         ],
         rejectionHandlers: [
             new transports.Console({ format: combine(colorize(), prettyPrint(), simple()) }),

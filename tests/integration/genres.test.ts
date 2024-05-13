@@ -1,6 +1,5 @@
-import request from 'supertest'
+import request, { Response } from 'supertest'
 import { Server, IncomingMessage, ServerResponse } from "http";
-import { Response } from 'superagent';
 
 import { Genre } from '../../models/genre';
 import { User } from '../../models/user';
@@ -10,8 +9,9 @@ interface Genre {
     name: string;
 }
 
-let server: Server<typeof IncomingMessage, typeof ServerResponse>;
 describe('/api/genres', () => {
+    let server: Server<typeof IncomingMessage, typeof ServerResponse>;
+
     beforeEach(() => server = require('../../index'))
     afterEach(async () => {
         server.close()
