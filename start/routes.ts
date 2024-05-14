@@ -11,6 +11,7 @@ import movieRouter from '../routes/movies'
 import genreRouter from '../routes/genres';
 import homeRouter from '../routes/home';
 import customerRouter from '../routes/customers'
+import returnRouter from '../routes/returns'
 
 function appRouter(app: Express) {
     app.use(express.json());
@@ -31,6 +32,7 @@ function appRouter(app: Express) {
     app.use('/api/genres', genreRouter);
     app.use('/api/customers', customerRouter);
     app.use('/api/movies', movieRouter);
+    app.use('/api/returns', returnRouter);
     app.use('/', homeRouter);
     app.use(error)
 };

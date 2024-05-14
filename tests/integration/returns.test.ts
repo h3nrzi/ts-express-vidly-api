@@ -1,4 +1,4 @@
-// import request from 'supertest'
+import request from 'supertest'
 import { Server, IncomingMessage, ServerResponse } from "http";
 
 import { Rental } from '../../models/rental';
@@ -32,13 +32,15 @@ describe('/api/returns', () => {
         await rental.save();
     })
     afterEach(async () => {
-        server.close()
+        await server.close()
         await Rental.deleteMany()
     })
 
-    it('should work! ', async () => {
-        const result = await Rental.findById(rental._id)
+    it('should return 401 if client is not logged in!', async () => {
+        const res = await request(server)
+            .post('/api/returns')
+            .send({ customerId, moveId })
 
-        expect(result).not.toBeNull()
+        expect(res.status).toBe(401)
     });
 })
