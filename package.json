@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start:dev": "nodemon index.ts",
-    "test": "jest --config jest.config.ts --watchAll --verbose --detectOpenHandles"
+    "test": "jest --config jest.config.ts --watchAll --verbose --coverage --detectOpenHandles"
   },
   "keywords": [],
   "author": "",

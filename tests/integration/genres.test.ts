@@ -3,6 +3,7 @@ import { Server, IncomingMessage, ServerResponse } from "http";
 
 import { Genre } from '../../models/genre';
 import { User } from '../../models/user';
+import mongoose from 'mongoose';
 
 interface Genre {
     _id: string;
@@ -48,6 +49,13 @@ describe('/api/genres', () => {
 
         it('should return 404 if invalid id is passed', async () => {
             const res = await request(server).get('/api/genres/' + 1)
+
+            expect(res.status).toBe(404);
+        })
+
+        it('should return 404 if no genre with the given id exist', async () => {
+            const id = new mongoose.Types.ObjectId()
+            const res = await request(server).get('/api/genres/' + id)
 
             expect(res.status).toBe(404);
         })
