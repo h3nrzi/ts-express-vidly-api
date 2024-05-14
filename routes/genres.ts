@@ -11,7 +11,7 @@ const router = express.Router();
 router.get('/', genreController.getAll);
 router.get('/:id', validateObjectId, genreController.get);
 router.post('/', auth, genreController.create);
-router.put('/:id', genreController.update);
-router.delete('/:id', auth, admin, genreController.remove);
+router.put('/:id', auth, validateObjectId, genreController.update);
+router.delete('/:id', auth, admin, validateObjectId, genreController.remove);
 
 export default router;
