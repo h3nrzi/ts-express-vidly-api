@@ -1,10 +1,15 @@
 import * as customerController from '../controllers/customer';
 import express from 'express';
+
+import validateRequest from '../Middlewares/validateRequest';
 const router = express.Router();
 
 router.get('/', customerController.getAll);
 router.get('/:id', customerController.get);
-router.post('/', customerController.create);
+router.post('/',
+    validateRequest(customerController.validateCustomer),
+    customerController.create
+);
 router.put('/:id', customerController.update);
 router.delete('/:id', customerController.remove);
 

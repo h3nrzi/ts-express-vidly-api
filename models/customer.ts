@@ -1,16 +1,5 @@
 import { CustomerDto as Customer } from '../dtos';
-import Joi from 'joi';
 import { Schema, model } from 'mongoose';
-
-function validateCustomer(customer: Customer) {
-    const schema = {
-        name: Joi.string().min(5).max(50).required(),
-        phone: Joi.string().min(5).max(50).required(),
-        isGold: Joi.boolean()
-    };
-
-    return Joi.validate(customer, schema);
-}
 
 const customerSchema = new Schema({
     name: {
@@ -31,4 +20,4 @@ const customerSchema = new Schema({
 
 const Customer = model('Customer', customerSchema);
 
-export { Customer, validateCustomer }
+export { Customer }
