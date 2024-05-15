@@ -1,17 +1,4 @@
-import { RentalDto } from '../dtos'
 import { Schema, model } from 'mongoose'
-import Joi from 'joi'
-
-function validateRental(rental: RentalDto) {
-    const schema = {
-        // @ts-expect-error
-        customerId: Joi.objectId().required(),
-        // @ts-expect-error
-        movieId: Joi.objectId().required()
-    }
-
-    return Joi.validate(rental, schema)
-}
 
 const movieSchema = new Schema({
     title: {
@@ -56,4 +43,4 @@ const rentalSchema = new Schema({
 
 const Rental = model('Rental', rentalSchema)
 
-export { Rental, validateRental }
+export { Rental }

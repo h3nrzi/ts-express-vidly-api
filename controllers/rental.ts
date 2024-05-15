@@ -1,10 +1,11 @@
 import mongoose from 'mongoose'
 import { Request, Response } from 'express';
+const Joi = require('joi')
 
 import { RentalDto } from '../dtos';
 import { Movie } from '../models/movie';
 import { Customer } from '../models/customer';
-import { Rental, validateRental } from '../models/rental';
+import { Rental } from '../models/rental';
 
 export async function getAll(req: Request, res: Response) {
     const movies = await Rental.find().sort({ dateOut: -1 })
@@ -22,10 +23,6 @@ export async function get(req: Request, res: Response) {
 }
 
 export async function create(req: Request, res: Response) {
-    const { error } = validateRental(req.body);
-    if (error)
-        return res.status(400).send(error.details[0].message);
-
     const { customerId, movieId } = req.body as RentalDto
 
     const customer = await Customer.findById(customerId)
@@ -77,4 +74,13 @@ export async function create(req: Request, res: Response) {
     })
 
     return res.status(201).send(rental);
+}
+
+export function validateRental(rental: RentalDto) {
+    const schema = {
+        customerId: Joi.objectId().required(),
+        movieId: Joi.objectId().required()
+    }
+
+    return Joi.validate(rental, schema)
 }
