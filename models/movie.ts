@@ -1,19 +1,6 @@
-import { MovieDto } from '../dtos'
-import Joi from 'joi'
 import { Schema, model } from 'mongoose'
+
 import { genreSchema } from './genre'
-
-function validateMovie(movie: MovieDto) {
-    const schema = {
-        title: Joi.string().required().min(5).max(50),
-        numberInStock: Joi.number().required().min(0),
-        dailyRentalRate: Joi.number().required().min(0),
-        // @ts-expect-error
-        genreId: Joi.objectId().required(),
-    }
-
-    return Joi.validate(movie, schema)
-}
 
 const movieSchema = new Schema({
     title: {
@@ -38,6 +25,6 @@ const movieSchema = new Schema({
     }
 })
 
-const MovieDto = model('Movie', movieSchema)
+const Movie = model('Movie', movieSchema)
 
-export { MovieDto as Movie, validateMovie }
+export { Movie }
