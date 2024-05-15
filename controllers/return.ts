@@ -19,5 +19,8 @@ export async function create(req: Request, res: Response) {
     if (!rental)
         return res.status(404).send('فیلم اجاره ای پیدا نشد')
 
+    if (rental.dateReturned)
+        return res.status(400).send('بازگشت فیلم اجاره ای قبلا پردازش شده است')
+
     return res.status(401).send('Unauthorized')
 }

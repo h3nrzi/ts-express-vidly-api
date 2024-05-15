@@ -9,6 +9,7 @@ describe('/api/returns', () => {
     let customerId: any;
     let movieId: any;
     let token: any;
+    let rental: any
 
     beforeEach(async () => {
         server = require('../../index')
@@ -16,7 +17,7 @@ describe('/api/returns', () => {
         customerId = new mongoose.Types.ObjectId()
         movieId = new mongoose.Types.ObjectId()
 
-        const rental = new Rental({
+        rental = new Rental({
             customer: {
                 _id: customerId,
                 name: '12345',
@@ -69,5 +70,14 @@ describe('/api/returns', () => {
         const res = await exec()
 
         expect(res.status).toBe(404)
+    });
+
+    it('should return 400 if rental is already processed', async () => {
+        rental.dateReturned = new Date()
+        await rental.save()
+
+        const res = await exec()
+
+        expect(res.status).toBe(400)
     });
 })
