@@ -2,7 +2,7 @@ import { Server, IncomingMessage, ServerResponse } from "http";
 import request, { Response } from 'supertest'
 import moment from 'moment';
 
-import { Rental } from '../../models/rental';
+const Rental = require('../../models/rental')
 import mongoose from 'mongoose';
 import { User } from '../../models/user';
 import { Movie } from "../../models/movie";

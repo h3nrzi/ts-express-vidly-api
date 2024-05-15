@@ -5,7 +5,7 @@ const Joi = require('joi')
 import { RentalDto } from '../dtos';
 import { Movie } from '../models/movie';
 import { Customer } from '../models/customer';
-import { Rental } from '../models/rental';
+const Rental = require('../models/rental')
 
 export async function getAll(req: Request, res: Response) {
     const movies = await Rental.find().sort({ dateOut: -1 })

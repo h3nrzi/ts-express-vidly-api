@@ -41,6 +41,11 @@ const rentalSchema = new Schema({
     }
 })
 
-const Rental = model('Rental', rentalSchema)
+rentalSchema.statics.lookup = function (customerId, movieId) {
+    return this.findOne({
+        'customer._id': customerId,
+        'movie._id': movieId
+    })
+}
 
-export { Rental }
+module.exports = model('Rental', rentalSchema)

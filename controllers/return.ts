@@ -2,17 +2,14 @@ import { Request, Response } from 'express'
 const Joi = require('joi')
 
 import { RentalDto } from '../dtos'
-import { Rental } from '../models/rental'
+const Rental = require('../models/rental')
 import moment from 'moment'
 import { Movie } from '../models/movie'
 
 export async function create(req: Request, res: Response) {
     const { customerId, movieId } = req.body as RentalDto
 
-    const rental = await Rental.findOne({
-        'customer._id': customerId,
-        'movie._id': movieId
-    }) as any
+    const rental = await Rental.lookup(customerId, movieId)
 
     if (!rental)
         return res.status(404).send('فیلم اجاره ای پیدا نشد')
