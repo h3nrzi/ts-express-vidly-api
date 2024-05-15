@@ -22,5 +22,8 @@ export async function create(req: Request, res: Response) {
     if (rental.dateReturned)
         return res.status(400).send('بازگشت فیلم اجاره ای قبلا پردازش شده است')
 
+    rental.dateReturned = new Date();
+    await rental.save()
+
     return res.status(200).send('درخواست معتبر!')
 }
