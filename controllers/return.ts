@@ -33,5 +33,5 @@ export async function create(req: Request, res: Response) {
         { $inc: { numberInStock: 1 } }
     )
 
-    return res.status(200).send('درخواست معتبر!')
+    return res.status(200).json(rental)
 }
