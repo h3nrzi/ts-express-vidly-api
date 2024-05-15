@@ -1,5 +1,8 @@
-import { Genre, validateGenre } from '../models/genre';
+import Joi from 'joi';
 import { Request, Response } from 'express'
+
+import { Genre } from '../models/genre';
+import { GenreDto } from '../dtos';
 
 export async function getAll(req: Request, res: Response) {
     // throw new Error("could not get the genres!")
@@ -17,11 +20,6 @@ export async function get(req: Request, res: Response) {
 }
 
 export async function create(req: Request, res: Response) {
-    const { error } = validateGenre(req.body);
-
-    if (error)
-        return res.status(400).send(error.details[0].message);
-
     let genre = new Genre({ name: req.body.name })
     genre = await genre.save()
 
@@ -53,4 +51,12 @@ export async function remove(req: Request, res: Response) {
         return res.status(404).send('ژانر با شناسه ی داده شده پیدا نشد!');
 
     return res.send(genre);
+}
+
+export function validateGenre(genre: GenreDto) {
+    const schema = {
+        name: Joi.string().min(5).max(50).required(),
+    };
+
+    return Joi.validate(genre, schema);
 }
