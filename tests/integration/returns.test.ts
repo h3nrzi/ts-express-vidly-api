@@ -1,11 +1,13 @@
+import { Server, IncomingMessage, ServerResponse } from "http";
 import request, { Response } from 'supertest'
+import moment from 'moment';
 
 import { Rental } from '../../models/rental';
 import mongoose from 'mongoose';
 import { User } from '../../models/user';
 
 describe('/api/returns', () => {
-    let server: any;
+    let server: Server<typeof IncomingMessage, typeof ServerResponse>;
     let customerId: any;
     let movieId: any;
     let token: any;
@@ -37,7 +39,7 @@ describe('/api/returns', () => {
     })
 
     afterEach(async () => {
-        await server.close()
+        server.close()
         await Rental.deleteMany()
     })
 
@@ -94,5 +96,17 @@ describe('/api/returns', () => {
         const diff = Date.now() - (rentalInDb?.dateReturned as any)
 
         expect(diff).toBeLessThan(10 * 1000)
+    });
+
+    it('should set the rentalFee if input is valid', async () => {
+        rental.dateOut = moment().add(-7, 'days').toDate()
+        rental.save()
+
+        await exec()
+
+        const rentalInDb = await Rental.findById(rental._id)
+
+        // rentalFee = MovieDailyRentalRate(2$) * daysOut(7) 
+        expect(rentalInDb?.rentalFee).toBe(14)
     });
 })

@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { RentalDto } from '../dtos'
 import { Rental } from '../models/rental'
+import moment from 'moment'
 
 export async function create(req: Request, res: Response) {
     const { customerId, movieId } = req.body as RentalDto
@@ -23,6 +24,8 @@ export async function create(req: Request, res: Response) {
         return res.status(400).send('بازگشت فیلم اجاره ای قبلا پردازش شده است')
 
     rental.dateReturned = new Date();
+    const rentalDays = moment().diff(rental.dateOut, 'days')
+    rental.rentalFee = rentalDays * rental.movie?.dailyRentalRate!
     await rental.save()
 
     return res.status(200).send('درخواست معتبر!')
