@@ -1,13 +1,13 @@
 import { Request, Response } from 'express'
 const Joi = require('joi')
 
-import { RentalDto } from '../dtos'
+import { ReturnDto } from '../dtos'
 const Rental = require('../models/rental')
 import moment from 'moment'
 import { Movie } from '../models/movie'
 
 export async function create(req: Request, res: Response) {
-    const { customerId, movieId } = req.body as RentalDto
+    const { customerId, movieId } = req.body as ReturnDto
 
     const rental = await Rental.lookup(customerId, movieId)
 
@@ -29,7 +29,7 @@ export async function create(req: Request, res: Response) {
     return res.status(200).json(rental)
 }
 
-export function validateReturn(req: RentalDto) {
+export function validateReturn(req: ReturnDto) {
     const schema = {
         customerId: Joi.objectId().required(),
         movieId: Joi.objectId().required(),

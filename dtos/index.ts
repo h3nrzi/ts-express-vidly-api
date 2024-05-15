@@ -1,3 +1,8 @@
+interface ReturnDto {
+    customerId: string,
+    movieId: string
+}
+
 interface AuthDto {
     email: string,
     password: string
@@ -38,5 +43,6 @@ export {
     CustomerDto,
     RentalDto,
     UserDto,
-    AuthDto
+    AuthDto,
+    ReturnDto
 }
