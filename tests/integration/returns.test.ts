@@ -5,6 +5,7 @@ import moment from 'moment';
 import { Rental } from '../../models/rental';
 import mongoose from 'mongoose';
 import { User } from '../../models/user';
+import { Movie } from "../../models/movie";
 
 describe('/api/returns', () => {
     let server: Server<typeof IncomingMessage, typeof ServerResponse>;
@@ -12,6 +13,7 @@ describe('/api/returns', () => {
     let movieId: any;
     let token: any;
     let rental: any
+    let movie: any
 
     beforeEach(async () => {
         server = require('../../index')
@@ -31,8 +33,18 @@ describe('/api/returns', () => {
                 dailyRentalRate: 2
             }
         })
-
         await rental.save();
+
+
+        movie = new Movie({
+            _id: movieId,
+            title: '12345',
+            dailyRentalRate: 2,
+            genre: { name: '12345' },
+            numberInStock: 10
+        })
+        await movie.save()
+
 
         const user = new User() as any
         token = await user.generateAuthToken()
@@ -41,6 +53,7 @@ describe('/api/returns', () => {
     afterEach(async () => {
         server.close()
         await Rental.deleteMany()
+        await Movie.deleteMany()
     })
 
     async function exec(): Promise<Response> {
@@ -108,5 +121,13 @@ describe('/api/returns', () => {
 
         // rentalFee = MovieDailyRentalRate(2$) * daysOut(7) 
         expect(rentalInDb?.rentalFee).toBe(14)
+    });
+
+    it('should increase the movie stock if input is valid', async () => {
+        await exec()
+
+        const movieInDb = await Movie.findById(movie._id)
+
+        expect(movieInDb?.numberInStock).toBe(movie.numberInStock + 1)
     });
 })
