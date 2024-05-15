@@ -1,20 +1,7 @@
-import Joi from 'joi';
 import jwt from 'jsonwebtoken'
 import config from 'config'
 
-import { UserDto } from '../dtos';
 import { Schema, model } from 'mongoose';
-
-function validateUser(user: UserDto) {
-    const schema = {
-        name: Joi.string().required().min(5).max(50),
-        email: Joi.string().required().min(5).max(255).email(),
-        password: Joi.string().required().min(5).max(1024),
-        isAdmin: Joi.boolean()
-    }
-
-    return Joi.validate(user, schema)
-}
 
 const userSchema = new Schema({
     name: {
@@ -45,4 +32,4 @@ userSchema.methods.generateAuthToken = function () {
 
 const User = model('User', userSchema);
 
-export { User, validateUser }
+export { User }

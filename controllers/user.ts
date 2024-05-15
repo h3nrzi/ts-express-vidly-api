@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
 import _ from 'lodash'
+import Joi from 'joi';
 
 import { UserDto } from '../dtos';
-import { User, validateUser } from '../models/user';
+import { User } from '../models/user';
 import bcrypt from 'bcrypt'
 
 export async function getMe(req: Request, res: Response) {
@@ -13,10 +14,6 @@ export async function getMe(req: Request, res: Response) {
 }
 
 export async function create(req: Request, res: Response) {
-    const { error } = validateUser(req.body);
-    if (error)
-        return res.status(400).send(error.details[0].message);
-
     const { email } = req.body as UserDto
 
     let user = await User.findOne({ email }) as any
@@ -33,4 +30,15 @@ export async function create(req: Request, res: Response) {
         .status(201)
         .header('x-auth-token', token)
         .json(_.pick(user, ['_id', 'name', 'email', 'isAdmin']));
+}
+
+export function validateUser(user: UserDto) {
+    const schema = {
+        name: Joi.string().required().min(5).max(50),
+        email: Joi.string().required().min(5).max(255).email(),
+        password: Joi.string().required().min(5).max(1024),
+        isAdmin: Joi.boolean()
+    }
+
+    return Joi.validate(user, schema)
 }
