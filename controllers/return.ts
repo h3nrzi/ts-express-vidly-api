@@ -3,7 +3,6 @@ const Joi = require('joi')
 
 import { ReturnDto } from '../dtos'
 const Rental = require('../models/rental')
-import moment from 'moment'
 import { Movie } from '../models/movie'
 
 export async function create(req: Request, res: Response) {
@@ -17,9 +16,7 @@ export async function create(req: Request, res: Response) {
     if (rental.dateReturned)
         return res.status(400).send('بازگشت فیلم اجاره ای قبلا پردازش شده است')
 
-    rental.dateReturned = new Date();
-    const rentalDays = moment().diff(rental.dateOut, 'days')
-    rental.rentalFee = rentalDays * rental.movie?.dailyRentalRate!
+    rental.returns()
     await rental.save()
 
     await Movie.updateOne({ _id: rental.movie._id },

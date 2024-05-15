@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose'
+import moment from 'moment'
 
 const movieSchema = new Schema({
     title: {
@@ -46,6 +47,13 @@ rentalSchema.statics.lookup = function (customerId, movieId) {
         'customer._id': customerId,
         'movie._id': movieId
     })
+}
+
+rentalSchema.methods.returns = function () {
+    this.dateReturned = new Date();
+
+    const rentalDays = moment().diff(this.dateOut, 'days')
+    this.rentalFee = rentalDays * this.movie.dailyRentalRate
 }
 
 module.exports = model('Rental', rentalSchema)
