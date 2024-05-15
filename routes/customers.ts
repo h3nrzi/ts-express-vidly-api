@@ -10,7 +10,10 @@ router.post('/',
     validateRequest(customerController.validateCustomer),
     customerController.create
 );
-router.put('/:id', customerController.update);
+router.put('/:id',
+    validateRequest(customerController.validateCustomer),
+    customerController.update
+);
 router.delete('/:id', customerController.remove);
 
 export default router;

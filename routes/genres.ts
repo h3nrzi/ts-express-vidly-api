@@ -10,13 +10,26 @@ const router = express.Router();
 
 
 router.get('/', genreController.getAll);
-router.get('/:id', validateObjectId, genreController.get);
+router.get('/:id',
+    validateObjectId,
+    genreController.get
+);
 router.post('/',
     auth,
     validateRequest(genreController.validateGenre),
     genreController.create
 );
-router.put('/:id', auth, validateObjectId, genreController.update);
-router.delete('/:id', auth, admin, validateObjectId, genreController.remove);
+router.put('/:id',
+    auth,
+    validateObjectId,
+    validateRequest(genreController.validateGenre),
+    genreController.update
+);
+router.delete('/:id',
+    auth,
+    admin,
+    validateObjectId,
+    genreController.remove
+);
 
 export default router;

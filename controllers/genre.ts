@@ -27,11 +27,6 @@ export async function create(req: Request, res: Response) {
 }
 
 export async function update(req: Request, res: Response) {
-    const { error } = validateGenre(req.body);
-
-    if (error)
-        return res.status(400).send(error.details[0].message);
-
     const genre = await Genre.findByIdAndUpdate(
         req.params.id,
         { name: req.body.name },

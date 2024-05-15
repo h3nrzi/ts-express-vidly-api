@@ -41,11 +41,6 @@ export async function create(req: Request, res: Response) {
 }
 
 export async function update(req: Request, res: Response) {
-    const { error } = validateMovie(req.body);
-
-    if (error)
-        return res.status(400).send(error.details[0].message);
-
     const { title, genreId, dailyRentalRate, numberInStock } = req.body as MovieDto;
 
     const movie = await Movie.findByIdAndUpdate(

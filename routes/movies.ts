@@ -10,7 +10,10 @@ router.post('/',
     validateRequest(movieController.validateMovie),
     movieController.create
 );
-router.put('/:id', movieController.update);
+router.put('/:id',
+    validateRequest(movieController.validateMovie),
+    movieController.update
+);
 router.delete('/:id', movieController.remove);
 
 export default router;
