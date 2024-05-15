@@ -22,5 +22,5 @@ export async function create(req: Request, res: Response) {
     if (rental.dateReturned)
         return res.status(400).send('بازگشت فیلم اجاره ای قبلا پردازش شده است')
 
-    return res.status(401).send('Unauthorized')
+    return res.status(200).send('درخواست معتبر!')
 }
