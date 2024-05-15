@@ -1,20 +1,20 @@
 import request from 'supertest'
-import { Server, IncomingMessage, ServerResponse } from "http";
 
 import { Rental } from '../../models/rental';
 import mongoose from 'mongoose';
+import { User } from '../../models/user';
 
 describe('/api/returns', () => {
-    let server: Server<typeof IncomingMessage, typeof ServerResponse>;
+    let server: any;
     let customerId: any;
-    let moveId: any;
+    let movieId: any;
     let rental: any;
 
     beforeEach(async () => {
         server = require('../../index')
 
         customerId = new mongoose.Types.ObjectId()
-        moveId = new mongoose.Types.ObjectId()
+        movieId = new mongoose.Types.ObjectId()
 
         rental = new Rental({
             customer: {
@@ -23,7 +23,7 @@ describe('/api/returns', () => {
                 phone: '12345'
             },
             movie: {
-                _id: moveId,
+                _id: movieId,
                 title: '12345',
                 dailyRentalRate: 2
             }
@@ -39,8 +39,32 @@ describe('/api/returns', () => {
     it('should return 401 if client is not logged in!', async () => {
         const res = await request(server)
             .post('/api/returns')
-            .send({ customerId, moveId })
+            .send({ customerId, movieId })
 
         expect(res.status).toBe(401)
+    });
+
+    it('should return 400 if customerId is not provided', async () => {
+        const user = new User() as any
+        const token = await user.generateAuthToken()
+
+        const res = await request(server)
+            .post('/api/returns')
+            .set('x-auth-token', token)
+            .send({ movieId })
+
+        expect(res.status).toBe(400)
+    });
+
+    it('should return 400 if movieId is not provided', async () => {
+        const user = new User() as any
+        const token = await user.generateAuthToken()
+
+        const res = await request(server)
+            .post('/api/returns')
+            .set('x-auth-token', token)
+            .send({ customerId })
+
+        expect(res.status).toBe(400)
     });
 })
