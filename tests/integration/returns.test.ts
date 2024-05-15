@@ -8,7 +8,6 @@ describe('/api/returns', () => {
     let server: any;
     let customerId: any;
     let movieId: any;
-    let rental: any;
     let token: any;
 
     beforeEach(async () => {
@@ -17,7 +16,7 @@ describe('/api/returns', () => {
         customerId = new mongoose.Types.ObjectId()
         movieId = new mongoose.Types.ObjectId()
 
-        rental = new Rental({
+        const rental = new Rental({
             customer: {
                 _id: customerId,
                 name: '12345',
@@ -64,11 +63,11 @@ describe('/api/returns', () => {
         expect(res.status).toBe(400)
     });
 
-    it('should return 400 if movieId is not provided', async () => {
-        movieId = '';
+    it('should return 404 if no rental found for the customer/movie', async () => {
+        await Rental.deleteMany()
 
         const res = await exec()
 
-        expect(res.status).toBe(400)
+        expect(res.status).toBe(404)
     });
 })
