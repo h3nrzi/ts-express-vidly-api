@@ -1,4 +1,4 @@
-**ts-express-vidly**
+**ts-express-vidly-api**
 =====================
 
 This is a rental movie API built with TypeScript, Express, and MongoDB.
@@ -89,14 +89,7 @@ This project uses the following dev dependencies:
 
 Hossein Rezaei
 
-**License**
--------
-
-ISC License
-
 **Node Version**
 -------------
 
 This project requires Node.js version 20.10.0 or higher.
-
-I hope this helps Let me know if you need any further assistance.
