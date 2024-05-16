@@ -1,9 +1,6 @@
-import express, { Express } from 'express';
-import morgan from 'morgan';
-import helmet from 'helmet';
-const log = require('debug')('app:log');
+import { Express } from 'express';
 
-import error from '../Middlewares/error';
+import globalErrorHandler from '../Middlewares/globalErrorHandler';
 import authRouter from '../routes/auth'
 import userRouter from '../routes/users'
 import rentalRouter from '../routes/rentals'
@@ -14,18 +11,6 @@ import customerRouter from '../routes/customers'
 import returnRouter from '../routes/returns'
 
 function appRouter(app: Express) {
-    app.use(express.json());
-    app.use(express.urlencoded({ extended: true }));
-    app.use(express.static('public'));
-    app.use(helmet());
-    if (app.get('env') === 'development') {
-        app.use(morgan('tiny'));
-        log('Morgan enabled...');
-        // const promise = Promise.reject(new Error("promise rejected"))
-        // promise.then(() => log("Done!"))
-        // throw new Error("Uncaught ex")
-    };
-
     app.use('/api/auth', authRouter);
     app.use('/api/users', userRouter);
     app.use('/api/rentals', rentalRouter);
@@ -34,7 +19,7 @@ function appRouter(app: Express) {
     app.use('/api/movies', movieRouter);
     app.use('/api/returns', returnRouter);
     app.use('/', homeRouter);
-    app.use(error)
+    app.use(globalErrorHandler)
 };
 
 module.exports = appRouter

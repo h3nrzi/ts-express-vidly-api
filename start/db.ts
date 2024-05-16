@@ -1,13 +1,14 @@
 import mongoose from "mongoose";
 import config from 'config';
-const logger = require('../start/logging')()
+import { Logger } from "winston";
 
 
-function dbConnection() {
+function dbConnection(logger: Logger) {
     const db: string = config.get('db')
     mongoose
         .connect(db)
         .then(() => logger.info(`Connected to ${db}...`))
+        .catch((err) => logger.error('', err))
 }
 
 module.exports = dbConnection
